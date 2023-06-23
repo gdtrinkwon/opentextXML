@@ -25,7 +25,19 @@ void Table::writeRow (ostream &out, map<string, string> row)
         for (string column : headers)
         {
                 auto it = row.find(column);
-                out << "<td> "<< (it != row.end()? it->second : "") << " </td> ";
+                string entry;
+                if (it != row.end())
+                {
+                    entry = it->second;
+                }
+                else
+                {
+                    // for missing data, leave the cell blank.
+                    std::cerr<<"Missing data from " << column;
+                    entry="";
+                }
+        
+                out << "<td> "<< entry << " </td> ";
         }
         out << "\n</tr>\n";
     }
