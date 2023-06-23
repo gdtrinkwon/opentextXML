@@ -2,29 +2,24 @@
 #include <fstream>
 #include <vector>
 #include <map>
-#include "HTMLTableMap.cpp"
 #include "XMLParser.cpp"
+
+#include "table.h"
 
 using namespace std;
 
 const vector<string> columns = {"TITLE", "ARTIST", "COMPANY", "COUNTRY", "PRICE", "YEAR"};
 
-void writeTable(vector<string> columns, vector<map<string, string>> rows)
+void writeTable(Table table)
 {
-    HTMLTableMap hTable;
-    hTable.setHeaders(columns);
-    for (int i = 0; i < rows.size(); i++)
-        {
-            hTable.addRow(rows[i]);
-        }
     // Open a file and write the HTML code to the file
    ofstream outFile("table.html");
-   outFile << hTable;
+   outFile << table;
    outFile.close();
 }
 
 
-vector<map<string, string>> parseXML(string fileName)
+Table parseXML(string fileName)
 {   
     XMLParser parser;
     return parser.parseXML(fileName);
@@ -39,8 +34,8 @@ int main(int argc, char* argv[])
     }
     
     // Read the cd_catalog file
-    vector<map<string, string>> cds = parseXML(argv[1]);
-    writeTable(columns, cds);
+    Table cds = parseXML(argv[1]);
+    writeTable(cds);
    
     return 0;
 }

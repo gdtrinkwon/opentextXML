@@ -2,7 +2,9 @@
 #include <fstream>
 #include <vector>
 #include <map>
+
 #include "rapidxml.hpp"
+#include "table.h"
 
 using namespace std;
 using namespace rapidxml;
@@ -13,8 +15,9 @@ private:
     xml_document<> doc;
     xml_node<> * root_node = NULL;
 public:
-    vector<map<string, string>> parseXML(string fileName)
+    Table parseXML(string fileName)
     {   
+        Table table;
         // Read the sample.xml file
         ifstream inputFile (fileName);
         vector<char> buffer((istreambuf_iterator<char>(inputFile)), istreambuf_iterator<char>());
@@ -38,11 +41,12 @@ public:
                     current_node; current_node = current_node->next_sibling())
             {
                 cdmap[current_node->name()] = current_node->value();
+                table.addHeader(current_node->name());
             }
 
-            cds.push_back(cdmap);
+            table.addRow(cdmap);
         }
 
-        return cds;
+        return table;
     }
 };
